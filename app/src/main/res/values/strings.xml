@@ -1,3 +1,25 @@
 <resources>
     <string name="app_name">Reactive UI</string>
+    <string name="activity_main_label">Reactive UI</string>
+    <string name="activity_main_title">Choose your way:</string>
+    <string name="activity_filters_label">Realty search</string>
+    <string name="activity_filters_rx">Start with Rx way</string>
+    <string name="activity_filters_oldschool">Start with oldschool way</string>
+    <string name="buy">Buy</string>
+    <string name="rent">Rent</string>
+
+    <string name="property_apartment">Apartment</string>
+    <string name="property_room">Room</string>
+    <string name="property_house">House</string>
+    <string name="property_type_label">What:</string>
+
+    <string-array name="property_types">
+        <item>@string/property_apartment</item>
+        <item>@string/property_room</item>
+        <item>@string/property_house</item>
+    </string-array>
+
+    <string name="main_class">com.marwinxxii.reactiveui.activity.FiltersActivity</string>
+    <string name="main_action_rx">com.marwinxxii.reactiveui.main.ACTION_RX</string>
+    <string name="main_action_classic">com.marwinxxii.reactiveui.main.ACTION_CLASSIC</string>
 </resources>

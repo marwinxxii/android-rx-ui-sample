@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <Preference android:title="@string/activity_filters_rx">
+        <intent
+            android:action="@string/main_action_rx"
+            android:targetClass="@string/main_class"
+            android:targetPackage="@string/app_id" />
+    </Preference>
+
+    <Preference android:title="@string/activity_filters_oldschool">
+        <intent
+            android:action="@string/main_action_oldschool"
+            android:targetClass="@string/main_class"
+            android:targetPackage="@string/app_id" />
+    </Preference>
+</PreferenceScreen>

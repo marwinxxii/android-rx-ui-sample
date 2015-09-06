@@ -1,8 +1,25 @@
 <resources>
 
+    <style name="BaseTheme" parent="Theme.AppCompat.Light">
+    </style>
+
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="BaseTheme">
         <!-- Customize your theme here. -->
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:actionBarStyle">@style/Toolbar</item>
+    </style>
+
+    <style name="MainActivity" parent="BaseTheme" />
+
+    <style name="Toolbar">
+        <item name="android:background">@android:color/white</item>
+    </style>
+
+    <style name="SegmentedButton">
+        <item name="android:button">@null</item>
+        <item name="android:gravity">center</item>
     </style>
 
 </resources>
