@@ -1,8 +1,6 @@
 package com.marwinxxii.reactiveui.activity;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 
 import com.marwinxxii.reactiveui.ClassicFiltersController;
 import com.marwinxxii.reactiveui.FiltersView;
@@ -11,14 +9,10 @@ import com.marwinxxii.reactiveui.R;
 import com.marwinxxii.reactiveui.RxFiltersController;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 
-public class FiltersActivity extends AppCompatActivity {
+public class FiltersActivity extends BaseActivity {
     @Bind(R.id.filters)
     FiltersView filters;
-
-    @Bind(R.id.toolbar)
-    Toolbar toolbar;
 
     private IFiltersController controller;
 
@@ -26,8 +20,7 @@ public class FiltersActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filters);
-        ButterKnife.bind(this);
-        setSupportActionBar(toolbar);
+        bindViews();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         String action = getIntent().getAction();

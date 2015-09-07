@@ -6,9 +6,9 @@
 
     <include layout="@layout/include_toolbar" />
 
-    <com.marwinxxii.reactiveui.FiltersView
-        android:id="@+id/filters"
-        style="@style/Filters"
+    <fragment
+        android:id="@+id/filters_fragment"
+        class="com.marwinxxii.reactiveui.activity.MainActivity$PrefsFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 </LinearLayout>
