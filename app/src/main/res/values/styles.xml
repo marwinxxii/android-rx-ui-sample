@@ -1,6 +1,11 @@
 <resources>
 
+    <color name="primary">#4caf50</color>
+    <color name="primary_accent">#2e7d32</color>
+
     <style name="BaseTheme" parent="Theme.AppCompat.Light">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorAccent">@color/primary_accent</item>
     </style>
 
     <!-- Base application theme. -->
@@ -8,20 +13,32 @@
         <!-- Customize your theme here. -->
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:actionBarStyle">@style/Toolbar</item>
+        <item name="toolbarStyle">@style/Toolbar</item>
     </style>
 
     <style name="MainActivity" parent="BaseTheme" />
 
-    <style name="Toolbar">
+    <style name="Toolbar" parent="Widget.AppCompat.Toolbar">
         <item name="android:background">@android:color/white</item>
+    </style>
+
+    <style name="SegmentedGroup">
+        <item name="android:radioButtonStyle">@style/SegmentedButton</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="sc_border_width">1dp</item>
+        <item name="sc_corner_radius">5dp</item>
+        <item name="sc_tint_color">@color/primary</item>
+        <item name="sc_checked_text_color">@android:color/black</item>
     </style>
 
     <style name="SegmentedButton">
         <item name="android:button">@null</item>
         <item name="android:gravity">center</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
     </style>
-    
+
     <style name="Price">
         <item name="android:digits">0123456789</item>
         <item name="android:hint">@string/price_to_hint</item>
@@ -30,4 +47,25 @@
         <item name="android:singleLine">true</item>
     </style>
 
+    <dimen name="padding_hor">16dp</dimen>
+    <dimen name="padding_vert">16dp</dimen>
+
+    <style name="Filters">
+        <item name="android:paddingTop">@dimen/padding_vert</item>
+        <item name="android:paddingBottom">@dimen/padding_vert</item>
+        <item name="android:paddingLeft">@dimen/padding_hor</item>
+        <item name="android:paddingRight">@dimen/padding_hor</item>
+        <item name="android:theme">@style/Filters_Theme</item>
+    </style>
+
+    <style name="Filters_Theme">
+        <item name="android:textViewStyle">@style/Filters.Label</item>
+    </style>
+
+    <style name="Filters.Label" parent="android:Widget.TextView">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <dimen name="filters_vert_space">24dp</dimen>
+    <dimen name="filters_vert_space_half">12dp</dimen>
 </resources>

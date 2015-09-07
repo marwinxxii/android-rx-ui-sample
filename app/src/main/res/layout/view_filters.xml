@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:segmentedgroup="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <info.hoang8f.android.segmented.SegmentedGroup
         android:id="@+id/deal_type"
+        style="@style/SegmentedGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        segmentedgroup:sc_border_width="1dp"
-        segmentedgroup:sc_corner_radius="5dp">
+        android:layout_marginBottom="@dimen/filters_vert_space">
 
         <RadioButton
             android:id="@+id/deal_type_buy"
@@ -34,6 +32,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/filters_vert_space"
         android:orientation="horizontal">
 
         <TextView
@@ -54,11 +53,13 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/filters_vert_space_half"
         android:text="@string/price" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/filters_vert_space"
         android:orientation="horizontal">
 
         <android.support.design.widget.TextInputLayout
