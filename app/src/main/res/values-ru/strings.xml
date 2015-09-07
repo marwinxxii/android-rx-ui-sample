@@ -1,4 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="apply_filters">Применить фильтры</string>
+    <string name="activity_main_title">Выберите тип примера:</string>
+
+    <string name="activity_filters_label">Поиск недвижимости</string>
+    <string name="activity_filters_label_rx">Поиск недвижимости - Rx</string>
+    <string name="activity_filters_rx">Rx вариант</string>
+    <string name="activity_filters_classic">Классический Android</string>
+
+    <string name="buy">Купить</string>
+    <string name="rent">Снять</string>
+
+    <string name="property_apartment">Квартира</string>
+    <string name="property_room">Комната</string>
+    <string name="property_house">Дом</string>
+    <string name="property_type_label">Что ищем:</string>
+
+    <string-array name="property_types">
+        <item>@string/property_apartment</item>
+        <item>@string/property_room</item>
+        <item>@string/property_house</item>
+    </string-array>
+
+    <string name="price">Цена:</string>
+    <string name="price_from_hint">От</string>
+    <string name="price_to_hint">До</string>
+    <string name="currency_rur_label">рублей</string>
+    <string name="price_error">Неправильная цена</string>
+    <string name="apply_filters">Применить</string>
+    <string name="filters_applied">Фильтры применены</string>
+    <string name="offers_found">%d предложений</string>
 </resources>

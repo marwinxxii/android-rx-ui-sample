@@ -1,15 +1,15 @@
 <resources>
-    <string name="app_name">Reactive UI</string>
+    <string name="app_name" translatable="false">Reactive UI</string>
 
-    <string name="activity_main_label">Reactive UI</string>
-    <string name="activity_main_title">Choose your way:</string>
-    <string name="main_class">com.marwinxxii.reactiveui.activity.FiltersActivity</string>
-    <string name="main_action_rx">com.marwinxxii.reactiveui.main.ACTION_RX</string>
-    <string name="main_action_classic">com.marwinxxii.reactiveui.main.ACTION_CLASSIC</string>
+    <string name="activity_main_title">Choose sample to run:</string>
 
+    <string name="activity_filters_class" translatable="false">com.marwinxxii.reactiveui.activity.FiltersActivity</string>
+    <string name="activity_filters_action_rx" translatable="false">com.marwinxxii.reactiveui.filters.ACTION_RX</string>
+    <string name="activity_filters_action_classic" translatable="false">com.marwinxxii.reactiveui.filters.ACTION_CLASSIC</string>
     <string name="activity_filters_label">Realty search</string>
-    <string name="activity_filters_rx">Start with Rx way</string>
-    <string name="activity_filters_oldschool">Start with oldschool way</string>
+    <string name="activity_filters_label_rx">Realty search - Rx</string>
+    <string name="activity_filters_rx">Rx way</string>
+    <string name="activity_filters_classic">Classic way</string>
 
     <string name="buy">Buy</string>
     <string name="rent">Rent</string>

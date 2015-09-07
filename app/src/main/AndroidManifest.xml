@@ -9,7 +9,6 @@
 
         <activity
             android:name=".activity.MainActivity"
-            android:label="@string/activity_main_label"
             android:theme="@style/MainActivity">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />

@@ -30,9 +30,10 @@ public class FiltersActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         String action = getIntent().getAction();
-        String actionRx = getString(R.string.main_action_rx);
+        String actionRx = getString(R.string.activity_filters_action_rx);
         if (actionRx.equals(action)) {
             controller = new RxFiltersController();
+            setTitle(R.string.activity_filters_label_rx);
         } else {
             controller = new ClassicFiltersController();
         }
