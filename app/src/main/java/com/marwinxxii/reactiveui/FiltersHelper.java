@@ -11,10 +11,10 @@ public final class FiltersHelper {
     private FiltersHelper() {
     }
 
-    public static SearchRequest buildRequest(int dealTypeId, int propertyTypeId, PriceRange price) {
+    public static SearchRequest buildRequest(int dealTypeId, int propertyTypeIndex, PriceRange price) {
         return new SearchRequest(
             R.id.deal_type_buy == dealTypeId ? DealType.BUY : DealType.RENT,
-            getProperty(propertyTypeId),
+            getProperty(propertyTypeIndex),
             price
         );
     }

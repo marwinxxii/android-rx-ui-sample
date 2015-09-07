@@ -1,5 +1,5 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.marwinxxii.reactiveui">
+<manifest package="com.marwinxxii.reactiveui"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application
         android:allowBackup="true"
@@ -18,7 +18,12 @@
 
         <activity
             android:name=".activity.FiltersActivity"
-            android:label="@string/activity_filters_label" />
+            android:label="@string/activity_filters_label"
+            android:parentActivityName=".activity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
