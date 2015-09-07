@@ -1,6 +1,7 @@
 package com.marwinxxii.reactiveui.activity;
 
 import android.os.Bundle;
+import android.widget.TextView;
 
 import com.marwinxxii.reactiveui.ClassicFiltersController;
 import com.marwinxxii.reactiveui.FiltersView;
@@ -13,6 +14,9 @@ import butterknife.Bind;
 public class FiltersActivity extends BaseActivity {
     @Bind(R.id.filters)
     FiltersView filters;
+
+    @Bind(R.id.found_offers)
+    TextView foundOffersView;
 
     private IFiltersController controller;
 
@@ -31,7 +35,7 @@ public class FiltersActivity extends BaseActivity {
         } else {
             controller = new ClassicFiltersController();
         }
-        controller.init(filters, toolbar);
+        controller.init(filters, foundOffersView);
     }
 
     @Override

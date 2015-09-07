@@ -3,9 +3,12 @@ package com.marwinxxii.reactiveui;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.text.TextUtils;
-import com.marwinxxii.reactiveui.network.SearchRequest;
-import com.marwinxxii.reactiveui.network.SearchRequest.DealType;
-import com.marwinxxii.reactiveui.network.SearchRequest.PropertyType;
+import android.view.View;
+import android.widget.TextView;
+
+import com.marwinxxii.reactiveui.entities.SearchRequest;
+import com.marwinxxii.reactiveui.entities.DealType;
+import com.marwinxxii.reactiveui.entities.PropertyType;
 
 public final class FiltersHelper {
     private FiltersHelper() {
@@ -56,6 +59,12 @@ public final class FiltersHelper {
     
     public static void handlePriceError(boolean isError, TextInputLayout layout) {
         layout.setError(isError ? layout.getContext().getString(R.string.price_error) : null);
+    }
+
+    public static void setOffersCount(TextView offersView, Integer count) {
+        String text = offersView.getContext().getString(R.string.offers_found, count);
+        offersView.setText(text);
+        offersView.setVisibility(View.VISIBLE);
     }
 
     private static PropertyType getProperty(int propertyIndex) {

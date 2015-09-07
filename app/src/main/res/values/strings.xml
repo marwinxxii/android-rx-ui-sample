@@ -32,5 +32,5 @@
     <string name="price_error">Incorrect price</string>
     <string name="apply_filters">Apply</string>
     <string name="filters_applied">Filters applied</string>
-    <string name="offers_found">%d offers</string>
+    <string name="offers_found">%d offers found</string>
 </resources>

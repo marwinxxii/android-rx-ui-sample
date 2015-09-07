@@ -2,12 +2,13 @@ package com.marwinxxii.reactiveui;
 
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
-import com.marwinxxii.reactiveui.network.SearchRequest;
+import android.widget.TextView;
+
+import com.marwinxxii.reactiveui.entities.SearchRequest;
 
 public class ClassicFiltersController implements IFiltersController {
     private FiltersView filters;
@@ -15,7 +16,7 @@ public class ClassicFiltersController implements IFiltersController {
     private Integer priceTo;
 
     @Override
-    public void init(FiltersView filters, Toolbar toolbar) {
+    public void init(FiltersView filters, TextView offersView) {
         this.filters = filters;
 
         filters.getDealType().setOnCheckedChangeListener((group, checkedId) -> onFieldsChanged());

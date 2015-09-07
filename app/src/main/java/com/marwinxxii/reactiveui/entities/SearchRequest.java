@@ -1,4 +1,4 @@
-package com.marwinxxii.reactiveui.network;
+package com.marwinxxii.reactiveui.entities;
 
 import com.marwinxxii.reactiveui.PriceRange;
 
@@ -32,13 +32,5 @@ public class SearchRequest {
             ", prop=" + property +
             ", price=" + price +
             '}';
-    }
-
-    public enum DealType {
-        BUY, RENT
-    }
-
-    public enum PropertyType {
-        APT, ROOM, HOUSE
     }
 }

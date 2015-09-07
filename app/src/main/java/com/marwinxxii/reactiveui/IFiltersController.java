@@ -1,9 +1,9 @@
 package com.marwinxxii.reactiveui;
 
-import android.support.v7.widget.Toolbar;
+import android.widget.TextView;
 
 public interface IFiltersController {
-    void init(FiltersView view, Toolbar toolbar);
+    void init(FiltersView view, TextView offersView);
 
     void onStop();
 }

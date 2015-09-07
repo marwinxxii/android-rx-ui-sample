@@ -28,5 +28,5 @@
     <string name="price_error">Неправильная цена</string>
     <string name="apply_filters">Применить</string>
     <string name="filters_applied">Фильтры применены</string>
-    <string name="offers_found">%d предложений</string>
+    <string name="offers_found">Найдено %d предложений</string>
 </resources>
