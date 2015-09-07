@@ -31,11 +31,7 @@ public class ClassicFiltersController implements IFiltersController {
             }
         });
 
-        filters.getPriceFrom().getEditText().addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
+        filters.getPriceFrom().getEditText().addTextChangedListener(new SimpleTextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 boolean isError = !FiltersHelper.validatePrice(s);
@@ -44,17 +40,9 @@ public class ClassicFiltersController implements IFiltersController {
                 }
                 handlePriceChange(isError, filters.getPriceFrom());
             }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
         });
 
-        filters.getPriceTo().getEditText().addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
+        filters.getPriceTo().getEditText().addTextChangedListener(new SimpleTextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 boolean isError = !FiltersHelper.validatePrice(s);
@@ -62,10 +50,6 @@ public class ClassicFiltersController implements IFiltersController {
                     priceTo = FiltersHelper.convertPrice(s);
                 }
                 handlePriceChange(isError, filters.getPriceTo());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
             }
         });
 
@@ -93,6 +77,20 @@ public class ClassicFiltersController implements IFiltersController {
             if (range != null) {
                 onFieldsChanged();
             }
+        }
+    }
+
+    public static class SimpleTextWatcher implements TextWatcher {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
         }
     }
 }
