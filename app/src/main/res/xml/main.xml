@@ -9,7 +9,7 @@
 
     <Preference android:title="@string/activity_filters_oldschool">
         <intent
-            android:action="@string/main_action_oldschool"
+            android:action="@string/main_action_classic"
             android:targetClass="@string/main_class"
             android:targetPackage="@string/app_id" />
     </Preference>

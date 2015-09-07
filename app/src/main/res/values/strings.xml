@@ -1,10 +1,16 @@
 <resources>
     <string name="app_name">Reactive UI</string>
+
     <string name="activity_main_label">Reactive UI</string>
     <string name="activity_main_title">Choose your way:</string>
+    <string name="main_class">com.marwinxxii.reactiveui.activity.FiltersActivity</string>
+    <string name="main_action_rx">com.marwinxxii.reactiveui.main.ACTION_RX</string>
+    <string name="main_action_classic">com.marwinxxii.reactiveui.main.ACTION_CLASSIC</string>
+
     <string name="activity_filters_label">Realty search</string>
     <string name="activity_filters_rx">Start with Rx way</string>
     <string name="activity_filters_oldschool">Start with oldschool way</string>
+
     <string name="buy">Buy</string>
     <string name="rent">Rent</string>
 
@@ -19,7 +25,12 @@
         <item>@string/property_house</item>
     </string-array>
 
-    <string name="main_class">com.marwinxxii.reactiveui.activity.FiltersActivity</string>
-    <string name="main_action_rx">com.marwinxxii.reactiveui.main.ACTION_RX</string>
-    <string name="main_action_classic">com.marwinxxii.reactiveui.main.ACTION_CLASSIC</string>
+    <string name="price">Price:</string>
+    <string name="price_from_hint">From</string>
+    <string name="price_to_hint">To</string>
+    <string name="currency_rur_label">roubles</string>
+    <string name="price_error">Incorrect price</string>
+    <string name="apply_filters">Apply</string>
+    <string name="filters_applied">Filters applied</string>
+    <string name="offers_found">%d offers</string>
 </resources>

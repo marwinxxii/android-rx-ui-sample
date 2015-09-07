@@ -1,23 +1,22 @@
 package com.marwinxxii.reactiveui;
 
+import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Toast;
+import com.marwinxxii.reactiveui.network.SearchRequest;
 
-/**
- * @author Alexey Agapitov <agapitov@yandex-team.ru> on 06.09.2015
- */
 public class ClassicFiltersController implements IFiltersController {
     private FiltersView filters;
-    private Toolbar toolbar;
+    private Integer priceFrom;
+    private Integer priceTo;
 
     @Override
     public void init(FiltersView filters, Toolbar toolbar) {
         this.filters = filters;
-        this.toolbar = toolbar;
 
         filters.getDealType().setOnCheckedChangeListener((group, checkedId) -> onFieldsChanged());
 
@@ -32,23 +31,46 @@ public class ClassicFiltersController implements IFiltersController {
             }
         });
 
-        filters.getPrice().addTextChangedListener(new TextWatcher() {
+        filters.getPriceFrom().getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (SearchHelper.validatePrice(s)) {
-                    onFieldsChanged();
-                } else {
-                    Toast.makeText(filters.getContext(), "Price is too low or incorrect", Toast.LENGTH_SHORT).show();
+                boolean isError = !FiltersHelper.validatePrice(s);
+                if (!isError) {
+                    priceFrom = FiltersHelper.convertPrice(s);
                 }
+                handlePriceChange(isError, filters.getPriceFrom());
             }
 
             @Override
             public void afterTextChanged(Editable s) {
             }
+        });
+
+        filters.getPriceTo().getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                boolean isError = !FiltersHelper.validatePrice(s);
+                if (!isError) {
+                    priceTo = FiltersHelper.convertPrice(s);
+                }
+                handlePriceChange(isError, filters.getPriceTo());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        filters.getApplyButton().setOnClickListener(v -> {
+            Snackbar.make(filters, R.string.filters_applied, Snackbar.LENGTH_SHORT).show();
         });
     }
 
@@ -59,7 +81,18 @@ public class ClassicFiltersController implements IFiltersController {
     private void onFieldsChanged() {
         int dealTypeId = filters.getDealType().getCheckedRadioButtonId();
         int propertyTypeId = (int) filters.getPropertyType().getSelectedItemId();
-        int price = SearchHelper.convertPrice(filters.getPrice().getText());
-        toolbar.setTitle(SearchHelper.buildRequest(dealTypeId, propertyTypeId, price).toString());
+        PriceRange price = FiltersHelper.processPriceRange(priceFrom, priceTo, filters);
+        SearchRequest request = FiltersHelper.buildRequest(dealTypeId, propertyTypeId, price);
+    }
+
+    private void handlePriceChange(boolean isError, TextInputLayout priceView) {
+        FiltersHelper.handlePriceError(isError, priceView);
+        filters.getApplyButton().setEnabled(!isError);
+        if (!isError) {
+            PriceRange range = FiltersHelper.processPriceRange(priceFrom, priceTo, filters);
+            if (range != null) {
+                onFieldsChanged();
+            }
+        }
     }
 }

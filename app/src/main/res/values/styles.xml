@@ -21,5 +21,13 @@
         <item name="android:button">@null</item>
         <item name="android:gravity">center</item>
     </style>
+    
+    <style name="Price">
+        <item name="android:digits">0123456789</item>
+        <item name="android:hint">@string/price_to_hint</item>
+        <item name="android:inputType">number</item>
+        <item name="android:maxLength">10</item>
+        <item name="android:singleLine">true</item>
+    </style>
 
 </resources>

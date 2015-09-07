@@ -3,19 +3,14 @@ package com.marwinxxii.reactiveui;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
+import android.support.design.widget.TextInputLayout;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.RadioGroup;
-import android.widget.Spinner;
+import android.widget.*;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-/**
- * @author Alexey Agapitov <agapitov@yandex-team.ru> on 06.09.2015
- */
 public class FiltersView extends FrameLayout {
     @Bind(R.id.deal_type)
     RadioGroup dealType;
@@ -23,8 +18,14 @@ public class FiltersView extends FrameLayout {
     @Bind(R.id.property_type)
     Spinner propertyType;
 
-    @Bind(R.id.price)
-    EditText price;
+    @Bind(R.id.price_from)
+    TextInputLayout priceFrom;
+    
+    @Bind(R.id.price_to)
+    TextInputLayout priceTo;
+    
+    @Bind(R.id.apply)
+    Button apply;
 
     public FiltersView(Context context) {
         super(context);
@@ -62,7 +63,15 @@ public class FiltersView extends FrameLayout {
         return propertyType;
     }
 
-    public EditText getPrice() {
-        return price;
+    public TextInputLayout getPriceFrom() {
+        return priceFrom;
+    }
+
+    public TextInputLayout getPriceTo() {
+        return priceTo;
+    }
+
+    public Button getApplyButton() {
+        return apply;
     }
 }

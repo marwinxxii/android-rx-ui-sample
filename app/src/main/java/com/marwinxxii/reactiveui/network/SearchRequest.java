@@ -1,14 +1,13 @@
 package com.marwinxxii.reactiveui.network;
 
-/**
- * @author Alexey Agapitov <agapitov@yandex-team.ru> on 06.09.2015
- */
+import com.marwinxxii.reactiveui.PriceRange;
+
 public class SearchRequest {
     private final DealType deal;
     private final PropertyType property;
-    private final int price;
+    private final PriceRange price;
 
-    public SearchRequest(DealType deal, PropertyType property, int price) {
+    public SearchRequest(DealType deal, PropertyType property, PriceRange price) {
         this.deal = deal;
         this.property = property;
         this.price = price;
@@ -22,7 +21,7 @@ public class SearchRequest {
         return property;
     }
 
-    public int getPrice() {
+    public PriceRange getPrice() {
         return price;
     }
 

@@ -1,47 +1,56 @@
 package com.marwinxxii.reactiveui;
 
+import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.Toolbar;
-import android.widget.Toast;
-
+import com.jakewharton.rxbinding.view.RxView;
 import com.jakewharton.rxbinding.widget.RxAdapterView;
 import com.jakewharton.rxbinding.widget.RxRadioGroup;
 import com.jakewharton.rxbinding.widget.RxTextView;
-
 import rx.Observable;
 import rx.Subscription;
-import rx.subscriptions.CompositeSubscription;
+import rx.functions.Func1;
 
-/**
- * @author Alexey Agapitov <agapitov@yandex-team.ru> on 06.09.2015
- */
 public class RxFiltersController implements IFiltersController {
-    private CompositeSubscription subscriptions;
+    private Subscription mSubscription;
 
     @Override
     public void init(FiltersView filters, Toolbar toolbar) {
-        subscriptions = new CompositeSubscription();
-        Subscription s = Observable.combineLatest(
+        mSubscription = Observable.combineLatest(
             RxRadioGroup.checkedChanges(filters.getDealType()),
             RxAdapterView.itemSelections(filters.getPropertyType()),
-            RxTextView.textChanges(filters.getPrice())
-                .filter(p -> {
-                    boolean valid = SearchHelper.validatePrice(p);
-                    if (!valid) {
-                        Toast.makeText(filters.getContext(), "Price is too low or incorrect", Toast.LENGTH_SHORT).show();
-                    }
-                    return valid;
-                })
-                .map(SearchHelper::convertPrice),
 
-            SearchHelper::buildRequest
-        ).subscribe(request -> {
-            toolbar.setTitle(request.toString());
-        });
-        subscriptions.add(s);
+            Observable.combineLatest(
+                RxTextView.textChanges(filters.getPriceFrom().getEditText())
+                    .filter(filterProcessPrice(filters, filters.getPriceFrom()))
+                    .map(FiltersHelper::convertPrice),
+
+                RxTextView.textChanges(filters.getPriceTo().getEditText())
+                    .filter(filterProcessPrice(filters, filters.getPriceTo()))
+                    .map(FiltersHelper::convertPrice),
+
+                (from, to) -> FiltersHelper.processPriceRange(from, to, filters)
+            ).filter(pr -> pr != null),
+
+            FiltersHelper::buildRequest
+        )
+            .flatMap(request -> RxView.clicks(filters.getApplyButton()).map(o -> request))
+            .subscribe(request -> {
+                Snackbar.make(filters, R.string.filters_applied, Snackbar.LENGTH_SHORT).show();
+            });
     }
 
     @Override
     public void onStop() {
-        subscriptions.unsubscribe();
+        mSubscription.unsubscribe();
+    }
+
+    private static Func1<CharSequence, Boolean> filterProcessPrice(FiltersView filters, TextInputLayout priceView) {
+        return price -> {
+            boolean isError = !FiltersHelper.validatePrice(price);
+            FiltersHelper.handlePriceError(isError, priceView);
+            filters.getApplyButton().setEnabled(!isError);
+            return !isError;
+        };
     }
 }
