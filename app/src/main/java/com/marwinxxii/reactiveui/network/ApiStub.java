@@ -2,42 +2,56 @@ package com.marwinxxii.reactiveui.network;
 
 import com.marwinxxii.reactiveui.PriceRange;
 import com.marwinxxii.reactiveui.entities.DealType;
-import com.marwinxxii.reactiveui.entities.PropertyType;
+import com.marwinxxii.reactiveui.entities.SearchRequest;
 
 import java.io.IOException;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.http.Body;
 import rx.Observable;
+import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 
-public final class ApiStub {
-    private ApiStub() {
-    }
+public class ApiStub implements RealtyApi {
 
-    public static Observable<Integer> offersCountForFilter(
-        DealType deal, PropertyType property, PriceRange price
-    ) {
+    @Override
+    public Observable<Integer> offersCountForFilter(SearchRequest request) {
         Observable<Long> timer = Observable.timer(new Random().nextInt(500), TimeUnit.MILLISECONDS);
         if (new Random().nextBoolean()) {
-            return timer.flatMap(t -> Observable.just(calculateOffersCount(deal, property, price)));
+            return timer.flatMap(t -> Observable.just(calculateOffersCount(request)));
         } else {
             return timer.flatMap(t -> Observable.error(new IOException("Simulated IO error")));
         }
     }
 
-    public static void offersCountForFilter(DealType deal, PropertyType property, PriceRange price,
-        Action1<Integer> success, Action1<Throwable> error) {
-        offersCountForFilter(deal, property, price)
+    @Override
+    public void offersCountForFilterCb(@Body SearchRequest request, Callback<Integer> callback) {
+        offersCountForFilter(request)
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(success, error);
+            .subscribe(new Observer<Integer>() {
+                @Override
+                public void onCompleted() {
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    callback.failure((RetrofitError) e);
+                }
+
+                @Override
+                public void onNext(Integer integer) {
+                    callback.success(integer, null);
+                }
+            });
     }
 
-    private static int calculateOffersCount(DealType deal, PropertyType property, PriceRange price) {
+    private static int calculateOffersCount(SearchRequest request) {
         int base;
         int minPrice, maxPrice;
-        if (DealType.BUY.equals(deal)) {
+        if (DealType.BUY.equals(request.getDeal())) {
             base = new Random().nextInt(5000);
             minPrice = 3_000_000;
             maxPrice = 10_000_000;
@@ -47,8 +61,9 @@ public final class ApiStub {
             maxPrice = 50000;
         }
 
+        PriceRange price = request.getPrice();
         int from = Math.max(minPrice, price.getFrom() == null ? 0 : price.getFrom());
         int to = Math.min(maxPrice, price.getTo() == null ? 0 : price.getTo());
-        return (int)((from - to) / (double)minPrice * base);
+        return (int) ((from - to) / (double) minPrice * base);
     }
 }

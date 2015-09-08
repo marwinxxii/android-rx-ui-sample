@@ -9,15 +9,22 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.marwinxxii.reactiveui.entities.SearchRequest;
+import com.marwinxxii.reactiveui.network.NetworkHelper;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class ClassicFiltersController implements IFiltersController {
     private FiltersView filters;
+    private TextView offersView;
     private Integer priceFrom;
     private Integer priceTo;
 
     @Override
     public void init(FiltersView filters, TextView offersView) {
         this.filters = filters;
+        this.offersView = offersView;
 
         filters.getDealType().setOnCheckedChangeListener((group, checkedId) -> onFieldsChanged());
 
@@ -68,6 +75,20 @@ public class ClassicFiltersController implements IFiltersController {
         int propertyTypeId = (int) filters.getPropertyType().getSelectedItemId();
         PriceRange price = FiltersHelper.processPriceRange(priceFrom, priceTo, filters);
         SearchRequest request = FiltersHelper.buildRequest(dealTypeId, propertyTypeId, price);
+
+        NetworkHelper.provideApi().offersCountForFilterCb(request,
+            new Callback<Integer>() {
+                @Override
+                public void success(Integer offersCount, Response response) {
+                    FiltersHelper.setOffersCount(offersView, offersCount);
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    offersView.setVisibility(View.GONE);
+                }
+            }
+        );
     }
 
     private void handlePriceChange(boolean isError, TextInputLayout priceView) {

@@ -10,7 +10,7 @@ import com.jakewharton.rxbinding.widget.RxAdapterView;
 import com.jakewharton.rxbinding.widget.RxRadioGroup;
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.marwinxxii.reactiveui.entities.SearchRequest;
-import com.marwinxxii.reactiveui.network.ApiStub;
+import com.marwinxxii.reactiveui.network.NetworkHelper;
 
 import rx.Observable;
 import rx.Subscription;
@@ -42,7 +42,7 @@ public class RxFiltersController implements IFiltersController {
         )
             .flatMap(req -> {
                 return Observable.merge(
-                    ApiStub.offersCountForFilter(req.getDeal(), req.getProperty(), req.getPrice())
+                    NetworkHelper.provideApi().offersCountForFilter(req)
                         .doOnError(error -> offersView.setVisibility(View.GONE))
                         .onErrorResumeNext(Observable.empty())
                         .observeOn(AndroidSchedulers.mainThread()),

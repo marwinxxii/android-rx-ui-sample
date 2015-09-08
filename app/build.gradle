@@ -4,7 +4,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.0.0'
+        classpath 'com.android.tools.build:gradle:1.2.3'
         classpath 'me.tatarka:gradle-retrolambda:3.2.2'
     }
 }
@@ -52,4 +52,8 @@ dependencies {
 
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'info.hoang8f:android-segmented:1.0.6'
+
+    compile 'com.squareup.retrofit:retrofit:1.7.1'
+    compile 'com.squareup.okhttp:okhttp-urlconnection:2.0.0'
+    compile 'com.squareup.okhttp:okhttp:2.0.0'
 }
