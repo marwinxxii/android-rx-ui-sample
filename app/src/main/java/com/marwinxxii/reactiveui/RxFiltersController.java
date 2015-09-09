@@ -23,8 +23,8 @@ public class RxFiltersController implements IFiltersController {
     @Override
     public void init(FiltersView filters, TextView offersView) {
         mSubscription = Observable.combineLatest(
-            RxRadioGroup.checkedChanges(filters.getDealType()),
-            RxAdapterView.itemSelections(filters.getPropertyType()),
+            RxRadioGroup.checkedChanges(filters.getDealTypeRadioGroup()),
+            RxAdapterView.itemSelections(filters.getPropertyTypeSpinner()),
 
             Observable.combineLatest(
                 RxTextView.textChanges(filters.getPriceFrom().getEditText())

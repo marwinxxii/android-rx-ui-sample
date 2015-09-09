@@ -55,11 +55,11 @@ public class FiltersView extends FrameLayout {
         ButterKnife.bind(this);
     }
 
-    public RadioGroup getDealType() {
+    public RadioGroup getDealTypeRadioGroup() {
         return dealType;
     }
 
-    public Spinner getPropertyType() {
+    public Spinner getPropertyTypeSpinner() {
         return propertyType;
     }
 

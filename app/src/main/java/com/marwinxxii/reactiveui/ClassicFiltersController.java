@@ -26,9 +26,9 @@ public class ClassicFiltersController implements IFiltersController {
         this.filters = filters;
         this.offersView = offersView;
 
-        filters.getDealType().setOnCheckedChangeListener((group, checkedId) -> onFieldsChanged());
+        filters.getDealTypeRadioGroup().setOnCheckedChangeListener((group, checkedId) -> onFieldsChanged());
 
-        filters.getPropertyType().setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        filters.getPropertyTypeSpinner().setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 onFieldsChanged();
@@ -71,8 +71,8 @@ public class ClassicFiltersController implements IFiltersController {
     }
 
     private void onFieldsChanged() {
-        int dealTypeId = filters.getDealType().getCheckedRadioButtonId();
-        int propertyTypeId = (int) filters.getPropertyType().getSelectedItemId();
+        int dealTypeId = filters.getDealTypeRadioGroup().getCheckedRadioButtonId();
+        int propertyTypeId = (int) filters.getPropertyTypeSpinner().getSelectedItemId();
         PriceRange price = FiltersHelper.processPriceRange(priceFrom, priceTo, filters);
         SearchRequest request = FiltersHelper.buildRequest(dealTypeId, propertyTypeId, price);
 
