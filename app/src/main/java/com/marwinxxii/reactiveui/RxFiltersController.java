@@ -43,17 +43,13 @@ public class RxFiltersController implements IFiltersController {
             .flatMap(req -> {
                 return Observable.merge(
                     NetworkHelper.provideApi().offersCountForFilter(req)
+                        .observeOn(AndroidSchedulers.mainThread())
                         .doOnError(error -> offersView.setVisibility(View.GONE))
                         .onErrorResumeNext(Observable.empty())
-                        .observeOn(AndroidSchedulers.mainThread()),
+                        .doOnNext(count -> FiltersHelper.setOffersCount(offersView, count)),
 
                     RxView.clicks(filters.getApplyButton()).map((Object o) -> req)
                 )
-                    .doOnNext(event -> {
-                        if (event instanceof Integer) {
-                            FiltersHelper.setOffersCount(offersView, (int) event);
-                        }
-                    })
                     .ofType(SearchRequest.class);
             })
             .subscribe(request -> {
