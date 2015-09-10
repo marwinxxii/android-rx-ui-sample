@@ -8,9 +8,9 @@ import retrofit.http.POST;
 import rx.Observable;
 
 public interface RealtyApi {
-    @POST("/offers")
+    @POST("/offersCount")
     Observable<Integer> offersCountForFilter(@Body SearchRequest request);
 
-    @POST("/offers")
+    @POST("/offersCount")
     void offersCountForFilterCb(@Body SearchRequest request, Callback<Integer> callback);
 }

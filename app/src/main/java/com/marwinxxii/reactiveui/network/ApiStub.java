@@ -23,7 +23,8 @@ public class ApiStub implements RealtyApi {
         if (new Random().nextBoolean()) {
             return timer.flatMap(t -> Observable.just(calculateOffersCount(request)));
         } else {
-            return timer.flatMap(t -> Observable.error(new IOException("Simulated IO error")));
+            return timer.flatMap(t -> Observable.error(
+                RetrofitError.networkError("http://localhost/offersCount", new IOException("Simulated IO error"))));
         }
     }
 
