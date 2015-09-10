@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
+import com.marwinxxii.reactiveui.entities.PriceRange;
 import com.marwinxxii.reactiveui.entities.SearchRequest;
 import com.marwinxxii.reactiveui.entities.DealType;
 import com.marwinxxii.reactiveui.entities.PropertyType;

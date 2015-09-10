@@ -1,6 +1,6 @@
 package com.marwinxxii.reactiveui.network;
 
-import com.marwinxxii.reactiveui.PriceRange;
+import com.marwinxxii.reactiveui.entities.PriceRange;
 import com.marwinxxii.reactiveui.entities.DealType;
 import com.marwinxxii.reactiveui.entities.SearchRequest;
 

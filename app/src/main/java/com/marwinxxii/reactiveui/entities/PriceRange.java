@@ -1,4 +1,4 @@
-package com.marwinxxii.reactiveui;
+package com.marwinxxii.reactiveui.entities;
 
 import android.support.annotation.Nullable;
 import android.util.Pair;

@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
+import com.marwinxxii.reactiveui.entities.PriceRange;
 import com.marwinxxii.reactiveui.entities.SearchRequest;
 import com.marwinxxii.reactiveui.network.NetworkHelper;
 
