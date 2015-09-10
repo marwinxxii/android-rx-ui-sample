@@ -1,4 +1,4 @@
-package com.marwinxxii.reactiveui;
+package com.marwinxxii.reactiveui.filters;
 
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
+import com.marwinxxii.reactiveui.R;
 import com.marwinxxii.reactiveui.entities.PriceRange;
 import com.marwinxxii.reactiveui.entities.SearchRequest;
 import com.marwinxxii.reactiveui.network.NetworkHelper;

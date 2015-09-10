@@ -1,4 +1,4 @@
-package com.marwinxxii.reactiveui;
+package com.marwinxxii.reactiveui.filters;
 
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
@@ -9,6 +9,7 @@ import com.jakewharton.rxbinding.view.RxView;
 import com.jakewharton.rxbinding.widget.RxAdapterView;
 import com.jakewharton.rxbinding.widget.RxRadioGroup;
 import com.jakewharton.rxbinding.widget.RxTextView;
+import com.marwinxxii.reactiveui.R;
 import com.marwinxxii.reactiveui.entities.SearchRequest;
 import com.marwinxxii.reactiveui.network.NetworkHelper;
 

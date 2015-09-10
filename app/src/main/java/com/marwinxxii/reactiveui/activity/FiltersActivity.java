@@ -3,11 +3,11 @@ package com.marwinxxii.reactiveui.activity;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import com.marwinxxii.reactiveui.ClassicFiltersController;
-import com.marwinxxii.reactiveui.FiltersView;
-import com.marwinxxii.reactiveui.IFiltersController;
 import com.marwinxxii.reactiveui.R;
-import com.marwinxxii.reactiveui.RxFiltersController;
+import com.marwinxxii.reactiveui.filters.ClassicFiltersController;
+import com.marwinxxii.reactiveui.filters.FiltersView;
+import com.marwinxxii.reactiveui.filters.IFiltersController;
+import com.marwinxxii.reactiveui.filters.RxFiltersController;
 
 import butterknife.Bind;
 
