@@ -22,6 +22,19 @@ public class ClassicFiltersController implements IFiltersController {
     private Integer priceFrom;
     private Integer priceTo;
 
+    private final Callback<Integer> offersCountCallbackImpl = new Callback<Integer>() {
+        @Override
+        public void success(Integer offersCount, Response response) {
+            FiltersHelper.setOffersCount(offersView, offersCount);
+        }
+
+        @Override
+        public void failure(RetrofitError error) {
+            offersView.setVisibility(View.GONE);
+        }
+    };
+    private DetachableCallback<Integer> actualOffersCountCallback;
+
     @Override
     public void init(FiltersView filters, TextView offersView) {
         this.filters = filters;
@@ -69,6 +82,7 @@ public class ClassicFiltersController implements IFiltersController {
 
     @Override
     public void onStop() {
+        tryReleaseNetworkCallback();
     }
 
     private void onFieldsChanged() {
@@ -77,19 +91,9 @@ public class ClassicFiltersController implements IFiltersController {
         PriceRange price = FiltersHelper.processPriceRange(priceFrom, priceTo, filters);
         SearchRequest request = FiltersHelper.buildRequest(dealTypeId, propertyTypeId, price);
 
-        NetworkHelper.provideApi().offersCountForFilterCb(request,
-            new Callback<Integer>() {
-                @Override
-                public void success(Integer offersCount, Response response) {
-                    FiltersHelper.setOffersCount(offersView, offersCount);
-                }
-
-                @Override
-                public void failure(RetrofitError error) {
-                    offersView.setVisibility(View.GONE);
-                }
-            }
-        );
+        tryReleaseNetworkCallback();//cancel previous + avoid leak
+        actualOffersCountCallback = new DetachableCallback<>(offersCountCallbackImpl);
+        NetworkHelper.provideApi().offersCountForFilterCb(request, actualOffersCountCallback);
     }
 
     private void handlePriceChange(boolean isError, TextInputLayout priceView) {
@@ -100,6 +104,13 @@ public class ClassicFiltersController implements IFiltersController {
             if (range != null) {
                 onFieldsChanged();
             }
+        }
+    }
+
+    private void tryReleaseNetworkCallback() {
+        if (actualOffersCountCallback != null) {
+            actualOffersCountCallback.detach();
+            actualOffersCountCallback = null;
         }
     }
 
@@ -114,6 +125,34 @@ public class ClassicFiltersController implements IFiltersController {
 
         @Override
         public void afterTextChanged(Editable s) {
+        }
+    }
+
+    public static class DetachableCallback<T> implements Callback<T> {
+        private Callback<T> mCallback;
+        private boolean mIsDetached = false;
+
+        public DetachableCallback(Callback<T> mCallback) {
+            this.mCallback = mCallback;
+        }
+
+        @Override
+        public void success(T t, Response response) {
+            if (!mIsDetached) {
+                mCallback.success(t, response);
+            }
+        }
+
+        @Override
+        public void failure(RetrofitError error) {
+            if (!mIsDetached) {
+                mCallback.failure(error);
+            }
+        }
+
+        public void detach() {
+            mIsDetached = true;
+            mCallback = null;
         }
     }
 }
