@@ -29,6 +29,10 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
+    <style name="Toolbar_Theme">
+        <item name="colorControlNormal">@android:color/white</item>
+    </style>
+
     <style name="SegmentedGroup">
         <item name="android:radioButtonStyle">@style/SegmentedButton</item>
         <item name="android:orientation">horizontal</item>

@@ -3,4 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" />
+    android:layout_height="wrap_content"
+    android:theme="@style/Toolbar_Theme" />
+<!--setting toolbar in toolbarStyle of theme doesn't work-->
