@@ -17,4 +17,9 @@ public class PriceRange extends Pair<Integer, Integer> {
     public Integer getTo() {
         return second;
     }
+
+    @Override
+    public String toString() {
+        return "PriceRange{" + first + ", " + second + "}";
+    }
 }
