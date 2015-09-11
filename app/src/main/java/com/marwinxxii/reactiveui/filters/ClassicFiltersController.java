@@ -1,5 +1,7 @@
 package com.marwinxxii.reactiveui.filters;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
@@ -54,27 +56,21 @@ public class ClassicFiltersController implements IFiltersController {
             }
         });
 
-        filters.getPriceFrom().getEditText().addTextChangedListener(new SimpleTextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                boolean isError = !FiltersHelper.validatePrice(s);
-                if (!isError) {
-                    priceFrom = FiltersHelper.convertPrice(s);
-                }
-                handlePriceChange(isError, filters.getPriceFrom());
+        filters.getPriceFrom().getEditText().addTextChangedListener(new DebouncingTextWatcher(500L, s -> {
+            boolean isError = !FiltersHelper.validatePrice(s);
+            if (!isError) {
+                priceFrom = FiltersHelper.convertPrice(s);
             }
-        });
+            handlePriceChange(isError, filters.getPriceFrom());
+        }));
 
-        filters.getPriceTo().getEditText().addTextChangedListener(new SimpleTextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                boolean isError = !FiltersHelper.validatePrice(s);
-                if (!isError) {
-                    priceTo = FiltersHelper.convertPrice(s);
-                }
-                handlePriceChange(isError, filters.getPriceTo());
+        filters.getPriceTo().getEditText().addTextChangedListener(new DebouncingTextWatcher(500L, s -> {
+            boolean isError = !FiltersHelper.validatePrice(s);
+            if (!isError) {
+                priceTo = FiltersHelper.convertPrice(s);
             }
-        });
+            handlePriceChange(isError, filters.getPriceTo());
+        }));
 
         filters.getApplyButton().setOnClickListener(v -> {
             Snackbar.make(filters, R.string.filters_applied, Snackbar.LENGTH_SHORT).show();
@@ -115,13 +111,51 @@ public class ClassicFiltersController implements IFiltersController {
         }
     }
 
-    public static class SimpleTextWatcher implements TextWatcher {
+    public static abstract class SimpleTextWatcher implements TextWatcher {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+
+        @Override
+        public abstract void onTextChanged(CharSequence charSequence, int i, int i1, int i2);
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+        }
+    }
+
+    public static class DebouncingTextWatcher implements TextWatcher {
+        private final Callback1<CharSequence> callback;
+        private final long debounceInterval;
+
+        private final Handler handler = new Handler(Looper.getMainLooper());
+        private final Runnable notifyTextChangedRunnable = new Runnable() {
+            @Override
+            public void run() {
+                notifyQueued = false;
+                callback.call(lastText);
+                lastText = null;
+            }
+        };
+
+        private boolean notifyQueued = false;
+        private CharSequence lastText;
+
+        public DebouncingTextWatcher(long debounceInterval, Callback1<CharSequence> callback) {
+            this.callback = callback;
+            this.debounceInterval = debounceInterval;
+        }
+
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
         }
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
+            lastText = s;
+            if (!notifyQueued) {
+                notifyQueued = handler.postDelayed(notifyTextChangedRunnable, debounceInterval);
+            }
         }
 
         @Override
@@ -155,5 +189,9 @@ public class ClassicFiltersController implements IFiltersController {
             mIsDetached = true;
             mCallback = null;
         }
+    }
+
+    public interface Callback1<T> {
+        void call(T arg);
     }
 }
