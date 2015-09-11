@@ -1,10 +1,10 @@
 package com.marwinxxii.reactiveui.filters;
 
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.marwinxxii.reactiveui.R;
 import com.marwinxxii.reactiveui.entities.PriceRange;
@@ -71,7 +71,7 @@ public class ClassicFiltersController implements IFiltersController {
         }));
 
         filters.getApplyButton().setOnClickListener(v -> {
-            Snackbar.make(filters, R.string.filters_applied, Snackbar.LENGTH_SHORT).show();
+            Toast.makeText(filters.getContext(), R.string.filters_applied, Toast.LENGTH_SHORT).show();
         });
     }
 
