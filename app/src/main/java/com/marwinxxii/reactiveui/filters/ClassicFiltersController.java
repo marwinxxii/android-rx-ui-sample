@@ -86,6 +86,7 @@ public class ClassicFiltersController implements IFiltersController {
         PriceRange price = FiltersHelper.processPriceRange(priceFrom, priceTo, filters);
         SearchRequest request = FiltersHelper.buildRequest(dealTypeId, propertyTypeId, price);
 
+        offersView.setVisibility(View.GONE);
         tryReleaseNetworkCallback();//cancel previous + avoid leak
         actualOffersCountCallback = new DetachableCallback<>(offersCountCallbackImpl);
         NetworkHelper.provideApi().offersCountForFilterCb(request, actualOffersCountCallback);

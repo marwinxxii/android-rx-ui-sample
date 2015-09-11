@@ -47,6 +47,7 @@ public class RxFiltersController implements IFiltersController {
 
             FiltersHelper::buildRequest
         )
+            .doOnNext(req -> offersView.setVisibility(View.GONE))
             .flatMap(req -> {
                 return Observable.merge(
                     NetworkHelper.provideApi().offersCountForFilter(req)
