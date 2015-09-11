@@ -13,6 +13,8 @@ import com.marwinxxii.reactiveui.R;
 import com.marwinxxii.reactiveui.entities.SearchRequest;
 import com.marwinxxii.reactiveui.network.NetworkHelper;
 
+import java.util.concurrent.TimeUnit;
+
 import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -29,10 +31,14 @@ public class RxFiltersController implements IFiltersController {
 
             Observable.combineLatest(
                 RxTextView.textChanges(filters.getPriceFrom().getEditText())
+                    .debounce(500L, TimeUnit.MILLISECONDS)
+                    .observeOn(AndroidSchedulers.mainThread())
                     .filter(filterProcessPrice(filters, filters.getPriceFrom()))
                     .map(FiltersHelper::convertPrice),
 
                 RxTextView.textChanges(filters.getPriceTo().getEditText())
+                    .debounce(500L, TimeUnit.MILLISECONDS)
+                    .observeOn(AndroidSchedulers.mainThread())
                     .filter(filterProcessPrice(filters, filters.getPriceTo()))
                     .map(FiltersHelper::convertPrice),
 
