@@ -16,7 +16,6 @@ import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 
 public class ApiStub implements RealtyApi {
-
     @Override
     public Observable<Integer> offersCountForFilter(SearchRequest request) {
         Observable<Long> timer = Observable.timer(new Random().nextInt(500), TimeUnit.MILLISECONDS);
@@ -50,7 +49,8 @@ public class ApiStub implements RealtyApi {
     }
 
     private static int calculateOffersCount(SearchRequest request) {
-        int base;
+        return new Random().nextInt(DealType.BUY.equals(request.getDeal()) ? 6000 : 15000);
+        /*int base;
         int minPrice, maxPrice;
         if (DealType.BUY.equals(request.getDeal())) {
             base = new Random().nextInt(5000);
@@ -65,6 +65,6 @@ public class ApiStub implements RealtyApi {
         PriceRange price = request.getPrice();
         int from = Math.max(minPrice, price.getFrom() == null ? 0 : price.getFrom());
         int to = Math.min(maxPrice, price.getTo() == null ? 0 : price.getTo());
-        return (int) ((from - to) / (double) minPrice * base);
+        return (int) ((from - to) / (double) minPrice * base);*/
     }
 }
