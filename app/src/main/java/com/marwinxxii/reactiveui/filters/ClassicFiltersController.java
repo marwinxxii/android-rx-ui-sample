@@ -1,11 +1,7 @@
 package com.marwinxxii.reactiveui.filters;
 
-import android.os.Handler;
-import android.os.Looper;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
@@ -13,7 +9,9 @@ import android.widget.TextView;
 import com.marwinxxii.reactiveui.R;
 import com.marwinxxii.reactiveui.entities.PriceRange;
 import com.marwinxxii.reactiveui.entities.SearchRequest;
+import com.marwinxxii.reactiveui.network.DetachableCallback;
 import com.marwinxxii.reactiveui.network.NetworkHelper;
+import com.marwinxxii.reactiveui.utils.DebouncingTextWatcher;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -109,89 +107,5 @@ public class ClassicFiltersController implements IFiltersController {
             actualOffersCountCallback.detach();
             actualOffersCountCallback = null;
         }
-    }
-
-    public static abstract class SimpleTextWatcher implements TextWatcher {
-        @Override
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        }
-
-        @Override
-        public abstract void onTextChanged(CharSequence charSequence, int i, int i1, int i2);
-
-        @Override
-        public void afterTextChanged(Editable editable) {
-        }
-    }
-
-    public static class DebouncingTextWatcher implements TextWatcher {
-        private final Callback1<CharSequence> callback;
-        private final long debounceInterval;
-
-        private final Handler handler = new Handler(Looper.getMainLooper());
-        private final Runnable notifyTextChangedRunnable = new Runnable() {
-            @Override
-            public void run() {
-                notifyQueued = false;
-                callback.call(lastText);
-                lastText = null;
-            }
-        };
-
-        private boolean notifyQueued = false;
-        private CharSequence lastText;
-
-        public DebouncingTextWatcher(long debounceInterval, Callback1<CharSequence> callback) {
-            this.callback = callback;
-            this.debounceInterval = debounceInterval;
-        }
-
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            lastText = s;
-            if (!notifyQueued) {
-                notifyQueued = handler.postDelayed(notifyTextChangedRunnable, debounceInterval);
-            }
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-        }
-    }
-
-    public static class DetachableCallback<T> implements Callback<T> {
-        private Callback<T> mCallback;
-        private boolean mIsDetached = false;
-
-        public DetachableCallback(Callback<T> mCallback) {
-            this.mCallback = mCallback;
-        }
-
-        @Override
-        public void success(T t, Response response) {
-            if (!mIsDetached) {
-                mCallback.success(t, response);
-            }
-        }
-
-        @Override
-        public void failure(RetrofitError error) {
-            if (!mIsDetached) {
-                mCallback.failure(error);
-            }
-        }
-
-        public void detach() {
-            mIsDetached = true;
-            mCallback = null;
-        }
-    }
-
-    public interface Callback1<T> {
-        void call(T arg);
     }
 }
