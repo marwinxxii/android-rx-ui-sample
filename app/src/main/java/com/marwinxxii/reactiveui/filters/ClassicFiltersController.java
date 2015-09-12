@@ -93,7 +93,7 @@ public class ClassicFiltersController implements IFiltersController {
     }
 
     private void handlePriceChange(boolean isError, TextInputLayout priceView) {
-        FiltersHelper.handlePriceError(isError, priceView);
+        FiltersHelper.toggleShowPriceError(isError, priceView);
         filters.getApplyButton().setEnabled(!isError);
         if (!isError) {
             PriceRange range = FiltersHelper.processPriceRange(priceFrom, priceTo, filters);

@@ -46,20 +46,20 @@ public final class FiltersHelper {
     @Nullable
     public static PriceRange processPriceRange(Integer from, Integer to, FiltersView filters) {
         if (from == null || to == null || from <= to) {
-            handlePriceError(false, filters.getPriceFrom());
-            handlePriceError(false, filters.getPriceTo());
+            toggleShowPriceError(false, filters.getPriceFrom());
+            toggleShowPriceError(false, filters.getPriceTo());
             filters.getApplyButton().setEnabled(true);
             return new PriceRange(from, to);
         } else {
             boolean fromGreater = from > to;
-            handlePriceError(fromGreater, filters.getPriceFrom());
-            handlePriceError(!fromGreater, filters.getPriceTo());
+            toggleShowPriceError(fromGreater, filters.getPriceFrom());
+            toggleShowPriceError(!fromGreater, filters.getPriceTo());
             filters.getApplyButton().setEnabled(false);
             return null;
         }
     }
     
-    public static void handlePriceError(boolean isError, TextInputLayout layout) {
+    public static void toggleShowPriceError(boolean isError, TextInputLayout layout) {
         layout.setError(isError ? layout.getContext().getString(R.string.price_error) : null);
     }
 

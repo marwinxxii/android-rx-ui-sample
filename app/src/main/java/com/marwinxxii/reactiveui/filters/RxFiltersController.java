@@ -73,7 +73,7 @@ public class RxFiltersController implements IFiltersController {
     private static Func1<CharSequence, Boolean> filterProcessPrice(FiltersView filters, TextInputLayout priceView) {
         return price -> {
             boolean isError = !FiltersHelper.validatePrice(price);
-            FiltersHelper.handlePriceError(isError, priceView);
+            FiltersHelper.toggleShowPriceError(isError, priceView);
             filters.getApplyButton().setEnabled(!isError);
             return !isError;
         };
