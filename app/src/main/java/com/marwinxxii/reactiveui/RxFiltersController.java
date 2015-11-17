@@ -40,7 +40,7 @@ public class RxFiltersController implements IFiltersController {
 
             FiltersHelper::buildRequest
         )
-            .flatMap(req -> {
+            .switchMap(req -> {
                 return Observable.merge(
                     NetworkHelper.provideApi().offersCountForFilter(req)
                         .observeOn(AndroidSchedulers.mainThread())
