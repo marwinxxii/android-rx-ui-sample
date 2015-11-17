@@ -12,6 +12,7 @@ import com.marwinxxii.reactiveui.entities.PropertyType;
 
 public final class FiltersHelper {
     private FiltersHelper() {
+        throw new AssertionError("No instances");
     }
 
     public static SearchRequest buildRequest(int dealTypeId, int propertyTypeIndex, PriceRange price) {
