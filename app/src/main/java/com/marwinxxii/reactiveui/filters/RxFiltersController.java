@@ -29,6 +29,8 @@ public class RxFiltersController implements IFiltersController {
             RxRadioGroup.checkedChanges(filters.getDealTypeRadioGroup()),
             RxAdapterView.itemSelections(filters.getPropertyTypeSpinner()),
 
+            //pass main thread scheduler to avoid switching threads
+            //main thread handler supports scheduling with delay
             Observable.combineLatest(
                 RxTextView.textChanges(filters.getPriceFrom().getEditText())
                     .debounce(500L, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
