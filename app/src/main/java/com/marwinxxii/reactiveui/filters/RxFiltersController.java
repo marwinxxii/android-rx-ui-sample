@@ -31,14 +31,12 @@ public class RxFiltersController implements IFiltersController {
 
             Observable.combineLatest(
                 RxTextView.textChanges(filters.getPriceFrom().getEditText())
-                    .debounce(500L, TimeUnit.MILLISECONDS)
-                    .observeOn(AndroidSchedulers.mainThread())
+                    .debounce(500L, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
                     .filter(filterProcessPrice(filters, filters.getPriceFrom()))
                     .map(FiltersHelper::convertPrice),
 
                 RxTextView.textChanges(filters.getPriceTo().getEditText())
-                    .debounce(500L, TimeUnit.MILLISECONDS)
-                    .observeOn(AndroidSchedulers.mainThread())
+                    .debounce(500L, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
                     .filter(filterProcessPrice(filters, filters.getPriceTo()))
                     .map(FiltersHelper::convertPrice),
 
