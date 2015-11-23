@@ -6,7 +6,7 @@
 
     <include layout="@layout/include_toolbar" />
 
-    <com.marwinxxii.reactiveui.FiltersView
+    <com.marwinxxii.reactiveui.filters.FiltersView
         android:id="@+id/filters"
         style="@style/Filters"
         android:layout_width="match_parent"

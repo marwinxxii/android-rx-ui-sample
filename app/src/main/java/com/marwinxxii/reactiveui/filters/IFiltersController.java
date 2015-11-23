@@ -1,4 +1,4 @@
-package com.marwinxxii.reactiveui;
+package com.marwinxxii.reactiveui.filters;
 
 import android.widget.TextView;
 

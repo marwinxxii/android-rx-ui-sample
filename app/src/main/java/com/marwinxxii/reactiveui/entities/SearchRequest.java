@@ -1,7 +1,5 @@
 package com.marwinxxii.reactiveui.entities;
 
-import com.marwinxxii.reactiveui.PriceRange;
-
 public class SearchRequest {
     private final DealType deal;
     private final PropertyType property;

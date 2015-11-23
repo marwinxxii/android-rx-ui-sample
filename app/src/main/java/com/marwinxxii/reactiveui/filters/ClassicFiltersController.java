@@ -1,15 +1,17 @@
-package com.marwinxxii.reactiveui;
+package com.marwinxxii.reactiveui.filters;
 
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.marwinxxii.reactiveui.R;
+import com.marwinxxii.reactiveui.entities.PriceRange;
 import com.marwinxxii.reactiveui.entities.SearchRequest;
+import com.marwinxxii.reactiveui.network.DetachableCallback;
 import com.marwinxxii.reactiveui.network.NetworkHelper;
+import com.marwinxxii.reactiveui.utils.DebouncingTextWatcher;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -20,6 +22,19 @@ public class ClassicFiltersController implements IFiltersController {
     private TextView offersView;
     private Integer priceFrom;
     private Integer priceTo;
+
+    private final Callback<Integer> offersCountCallbackImpl = new Callback<Integer>() {
+        @Override
+        public void success(Integer offersCount, Response response) {
+            FiltersHelper.setOffersCount(offersView, offersCount);
+        }
+
+        @Override
+        public void failure(RetrofitError error) {
+            offersView.setVisibility(View.GONE);
+        }
+    };
+    private DetachableCallback<Integer> actualOffersCountCallback;
 
     @Override
     public void init(FiltersView filters, TextView offersView) {
@@ -39,35 +54,30 @@ public class ClassicFiltersController implements IFiltersController {
             }
         });
 
-        filters.getPriceFrom().getEditText().addTextChangedListener(new SimpleTextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                boolean isError = !FiltersHelper.validatePrice(s);
-                if (!isError) {
-                    priceFrom = FiltersHelper.convertPrice(s);
-                }
-                handlePriceChange(isError, filters.getPriceFrom());
+        filters.getPriceFrom().getEditText().addTextChangedListener(new DebouncingTextWatcher(500L, s -> {
+            boolean isError = !FiltersHelper.validatePrice(s);
+            if (!isError) {
+                priceFrom = FiltersHelper.convertPrice(s);
             }
-        });
+            handlePriceChange(isError, filters.getPriceFrom());
+        }));
 
-        filters.getPriceTo().getEditText().addTextChangedListener(new SimpleTextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                boolean isError = !FiltersHelper.validatePrice(s);
-                if (!isError) {
-                    priceTo = FiltersHelper.convertPrice(s);
-                }
-                handlePriceChange(isError, filters.getPriceTo());
+        filters.getPriceTo().getEditText().addTextChangedListener(new DebouncingTextWatcher(500L, s -> {
+            boolean isError = !FiltersHelper.validatePrice(s);
+            if (!isError) {
+                priceTo = FiltersHelper.convertPrice(s);
             }
-        });
+            handlePriceChange(isError, filters.getPriceTo());
+        }));
 
         filters.getApplyButton().setOnClickListener(v -> {
-            Snackbar.make(filters, R.string.filters_applied, Snackbar.LENGTH_SHORT).show();
+            Toast.makeText(filters.getContext(), R.string.filters_applied, Toast.LENGTH_SHORT).show();
         });
     }
 
     @Override
     public void onStop() {
+        tryReleaseNetworkCallback();
     }
 
     private void onFieldsChanged() {
@@ -76,23 +86,14 @@ public class ClassicFiltersController implements IFiltersController {
         PriceRange price = FiltersHelper.processPriceRange(priceFrom, priceTo, filters);
         SearchRequest request = FiltersHelper.buildRequest(dealTypeId, propertyTypeId, price);
 
-        NetworkHelper.provideApi().offersCountForFilterCb(request,
-            new Callback<Integer>() {
-                @Override
-                public void success(Integer offersCount, Response response) {
-                    FiltersHelper.setOffersCount(offersView, offersCount);
-                }
-
-                @Override
-                public void failure(RetrofitError error) {
-                    offersView.setVisibility(View.GONE);
-                }
-            }
-        );
+        offersView.setVisibility(View.GONE);
+        tryReleaseNetworkCallback();//cancel previous + avoid leak
+        actualOffersCountCallback = new DetachableCallback<>(offersCountCallbackImpl);
+        NetworkHelper.provideApi().offersCountForFilterCb(request, actualOffersCountCallback);
     }
 
     private void handlePriceChange(boolean isError, TextInputLayout priceView) {
-        FiltersHelper.handlePriceError(isError, priceView);
+        FiltersHelper.toggleShowPriceError(isError, priceView);
         filters.getApplyButton().setEnabled(!isError);
         if (!isError) {
             PriceRange range = FiltersHelper.processPriceRange(priceFrom, priceTo, filters);
@@ -102,17 +103,10 @@ public class ClassicFiltersController implements IFiltersController {
         }
     }
 
-    public static class SimpleTextWatcher implements TextWatcher {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
+    private void tryReleaseNetworkCallback() {
+        if (actualOffersCountCallback != null) {
+            actualOffersCountCallback.detach();
+            actualOffersCountCallback = null;
         }
     }
 }

@@ -1,16 +1,19 @@
-package com.marwinxxii.reactiveui;
+package com.marwinxxii.reactiveui.filters;
 
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jakewharton.rxbinding.view.RxView;
 import com.jakewharton.rxbinding.widget.RxAdapterView;
 import com.jakewharton.rxbinding.widget.RxRadioGroup;
 import com.jakewharton.rxbinding.widget.RxTextView;
+import com.marwinxxii.reactiveui.R;
 import com.marwinxxii.reactiveui.entities.SearchRequest;
 import com.marwinxxii.reactiveui.network.NetworkHelper;
+
+import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
 import rx.Subscription;
@@ -28,10 +31,14 @@ public class RxFiltersController implements IFiltersController {
 
             Observable.combineLatest(
                 RxTextView.textChanges(filters.getPriceFrom().getEditText())
+                    .debounce(500L, TimeUnit.MILLISECONDS)
+                    .observeOn(AndroidSchedulers.mainThread())
                     .filter(filterProcessPrice(filters, filters.getPriceFrom()))
                     .map(FiltersHelper::convertPrice),
 
                 RxTextView.textChanges(filters.getPriceTo().getEditText())
+                    .debounce(500L, TimeUnit.MILLISECONDS)
+                    .observeOn(AndroidSchedulers.mainThread())
                     .filter(filterProcessPrice(filters, filters.getPriceTo()))
                     .map(FiltersHelper::convertPrice),
 
@@ -40,6 +47,7 @@ public class RxFiltersController implements IFiltersController {
 
             FiltersHelper::buildRequest
         )
+            .doOnNext(req -> offersView.setVisibility(View.GONE))
             .switchMap(req -> {
                 return Observable.merge(
                     NetworkHelper.provideApi().offersCountForFilter(req)
@@ -53,7 +61,7 @@ public class RxFiltersController implements IFiltersController {
                     .ofType(SearchRequest.class);
             })
             .subscribe(request -> {
-                Snackbar.make(filters, R.string.filters_applied, Snackbar.LENGTH_SHORT).show();
+                Toast.makeText(filters.getContext(), R.string.filters_applied, Toast.LENGTH_SHORT).show();
             });
     }
 
@@ -65,7 +73,7 @@ public class RxFiltersController implements IFiltersController {
     private static Func1<CharSequence, Boolean> filterProcessPrice(FiltersView filters, TextInputLayout priceView) {
         return price -> {
             boolean isError = !FiltersHelper.validatePrice(price);
-            FiltersHelper.handlePriceError(isError, priceView);
+            FiltersHelper.toggleShowPriceError(isError, priceView);
             filters.getApplyButton().setEnabled(!isError);
             return !isError;
         };

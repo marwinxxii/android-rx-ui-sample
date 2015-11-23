@@ -1,4 +1,4 @@
-package com.marwinxxii.reactiveui;
+package com.marwinxxii.reactiveui.filters;
 
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
@@ -6,6 +6,8 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
+import com.marwinxxii.reactiveui.R;
+import com.marwinxxii.reactiveui.entities.PriceRange;
 import com.marwinxxii.reactiveui.entities.SearchRequest;
 import com.marwinxxii.reactiveui.entities.DealType;
 import com.marwinxxii.reactiveui.entities.PropertyType;
@@ -45,20 +47,20 @@ public final class FiltersHelper {
     @Nullable
     public static PriceRange processPriceRange(Integer from, Integer to, FiltersView filters) {
         if (from == null || to == null || from <= to) {
-            handlePriceError(false, filters.getPriceFrom());
-            handlePriceError(false, filters.getPriceTo());
+            toggleShowPriceError(false, filters.getPriceFrom());
+            toggleShowPriceError(false, filters.getPriceTo());
             filters.getApplyButton().setEnabled(true);
             return new PriceRange(from, to);
         } else {
             boolean fromGreater = from > to;
-            handlePriceError(fromGreater, filters.getPriceFrom());
-            handlePriceError(!fromGreater, filters.getPriceTo());
+            toggleShowPriceError(fromGreater, filters.getPriceFrom());
+            toggleShowPriceError(!fromGreater, filters.getPriceTo());
             filters.getApplyButton().setEnabled(false);
             return null;
         }
     }
     
-    public static void handlePriceError(boolean isError, TextInputLayout layout) {
+    public static void toggleShowPriceError(boolean isError, TextInputLayout layout) {
         layout.setError(isError ? layout.getContext().getString(R.string.price_error) : null);
     }
 
