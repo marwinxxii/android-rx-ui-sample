@@ -12,5 +12,5 @@ public interface RealtyApi {
     Observable<Integer> offersCountForFilter(@Body SearchRequest request);
 
     @POST("/offersCount")
-    void offersCountForFilterCb(@Body SearchRequest request, Callback<Integer> callback);
+    void offersCountForFilter(@Body SearchRequest request, Callback<Integer> callback);
 }

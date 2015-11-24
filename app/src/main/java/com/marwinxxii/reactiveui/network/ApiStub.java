@@ -28,7 +28,7 @@ public class ApiStub implements RealtyApi {
     }
 
     @Override
-    public void offersCountForFilterCb(@Body SearchRequest request, Callback<Integer> callback) {
+    public void offersCountForFilter(@Body SearchRequest request, Callback<Integer> callback) {
         offersCountForFilter(request)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(new Observer<Integer>() {

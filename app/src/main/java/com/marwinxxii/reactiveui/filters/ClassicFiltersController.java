@@ -89,7 +89,7 @@ public class ClassicFiltersController implements IFiltersController {
         offersView.setVisibility(View.GONE);
         tryReleaseNetworkCallback();//cancel previous + avoid leak
         actualOffersCountCallback = new DetachableCallback<>(offersCountCallbackImpl);
-        NetworkHelper.provideApi().offersCountForFilterCb(request, actualOffersCountCallback);
+        NetworkHelper.provideApi().offersCountForFilter(request, actualOffersCountCallback);
     }
 
     private void handlePriceChange(boolean isError, TextInputLayout priceView) {
