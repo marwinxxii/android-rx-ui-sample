@@ -5,26 +5,11 @@ import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 
-public class DebouncingTextWatcher implements TextWatcher {
-    private final Callback1<CharSequence> callback;
-    private final long debounceInterval;
+public abstract class DebouncingTextWatcher implements TextWatcher {
+    private final Debouncer<CharSequence> debouncer;
 
-    private final Handler handler = new Handler(Looper.getMainLooper());
-    private final Runnable notifyTextChangedRunnable = new Runnable() {
-        @Override
-        public void run() {
-            notifyQueued = false;
-            callback.call(lastText);
-            lastText = null;
-        }
-    };
-
-    private boolean notifyQueued = false;
-    private CharSequence lastText;
-
-    public DebouncingTextWatcher(long debounceInterval, Callback1<CharSequence> callback) {
-        this.callback = callback;
-        this.debounceInterval = debounceInterval;
+    public DebouncingTextWatcher(long debounceInterval) {
+        debouncer = new Debouncer<>(debounceInterval, this::onDebouncedTextChanged);
     }
 
     @Override
@@ -33,13 +18,42 @@ public class DebouncingTextWatcher implements TextWatcher {
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-        lastText = s;
-        if (!notifyQueued) {
-            notifyQueued = handler.postDelayed(notifyTextChangedRunnable, debounceInterval);
-        }
+        debouncer.onValueChange(s);
     }
 
     @Override
     public void afterTextChanged(Editable s) {
+    }
+
+    public abstract void onDebouncedTextChanged(CharSequence value);
+
+    private static class Debouncer<T> {
+        private final Handler handler = new Handler(Looper.getMainLooper());
+        private final long debounceInterval;
+        private final Callback1<T> valueCallback;
+
+        private boolean notifyQueued = false;
+        private T lastValue;
+
+        private final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                notifyQueued = false;
+                valueCallback.call(lastValue);
+                lastValue = null;
+            }
+        };
+
+        public Debouncer(long debounceInterval, Callback1<T> valueCallback) {
+            this.debounceInterval = debounceInterval;
+            this.valueCallback = valueCallback;
+        }
+
+        private void onValueChange(T newValue) {
+            lastValue = newValue;
+            if (!notifyQueued) {
+                notifyQueued = handler.postDelayed(runnable, debounceInterval);
+            }
+        }
     }
 }

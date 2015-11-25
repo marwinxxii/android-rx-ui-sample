@@ -36,6 +36,7 @@ public class ClassicFiltersController implements IFiltersController {
     };
     private DetachableCallback<Integer> actualOffersCountCallback;
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public void init(FiltersView filters, TextView offersView) {
         this.filters = filters;
@@ -54,21 +55,27 @@ public class ClassicFiltersController implements IFiltersController {
             }
         });
 
-        filters.getPriceFrom().getEditText().addTextChangedListener(new DebouncingTextWatcher(500L, s -> {
-            boolean isError = !FiltersHelper.validatePrice(s);
-            if (!isError) {
-                priceFrom = FiltersHelper.convertPrice(s);
+        filters.getPriceFrom().getEditText().addTextChangedListener(new DebouncingTextWatcher(500L) {
+            @Override
+            public void onDebouncedTextChanged(CharSequence value) {
+                boolean isError = !FiltersHelper.validatePrice(value);
+                if (!isError) {
+                    priceFrom = FiltersHelper.convertPrice(value);
+                }
+                handlePriceChange(isError, filters.getPriceFrom());
             }
-            handlePriceChange(isError, filters.getPriceFrom());
-        }));
+        });
 
-        filters.getPriceTo().getEditText().addTextChangedListener(new DebouncingTextWatcher(500L, s -> {
-            boolean isError = !FiltersHelper.validatePrice(s);
-            if (!isError) {
-                priceTo = FiltersHelper.convertPrice(s);
+        filters.getPriceTo().getEditText().addTextChangedListener(new DebouncingTextWatcher(500L) {
+            @Override
+            public void onDebouncedTextChanged(CharSequence value) {
+                boolean isError = !FiltersHelper.validatePrice(value);
+                if (!isError) {
+                    priceTo = FiltersHelper.convertPrice(value);
+                }
+                handlePriceChange(isError, filters.getPriceTo());
             }
-            handlePriceChange(isError, filters.getPriceTo());
-        }));
+        });
 
         filters.getApplyButton().setOnClickListener(v -> {
             Toast.makeText(filters.getContext(), R.string.filters_applied, Toast.LENGTH_SHORT).show();
