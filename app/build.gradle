@@ -57,3 +57,8 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.0.0'
     compile 'com.squareup.okhttp:okhttp:2.0.0'
 }
+
+/*retrolambda {
+    //set your JDK8 path here
+    jdk ''
+}*/
