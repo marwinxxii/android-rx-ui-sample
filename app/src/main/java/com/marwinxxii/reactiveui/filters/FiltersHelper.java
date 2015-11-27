@@ -26,16 +26,10 @@ public final class FiltersHelper {
     }
 
     public static boolean validatePrice(CharSequence price) {
-        if (!TextUtils.isEmpty(price)) {
-            String s = price.toString();
-            try {
-                int value = Integer.parseInt(s, 10);
-                if (value <= 0) {
-                    return false;
-                }
-            } catch (NumberFormatException e) {
-                return false;
-            }
+        try {
+            convertPrice(price);
+        } catch (NumberFormatException e) {
+            return false;
         }
         return true;
     }
@@ -56,10 +50,6 @@ public final class FiltersHelper {
             filters.setPriceToErrorVisible(!fromGreater);
             return null;
         }
-    }
-    
-    public static void toggleShowPriceError(boolean isError, TextInputLayout layout) {
-        layout.setError(isError ? layout.getContext().getString(R.string.price_error) : null);
     }
 
     public static void setOffersCount(TextView offersView, Integer count) {
