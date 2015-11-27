@@ -29,6 +29,9 @@ public class FiltersView extends FrameLayout {
     @Bind(R.id.apply)
     Button apply;
 
+    private boolean fromHasError = false;
+    private boolean toHasError = false;
+
     public FiltersView(Context context) {
         super(context);
     }
@@ -65,15 +68,34 @@ public class FiltersView extends FrameLayout {
         return propertyType;
     }
 
-    public TextInputLayout getPriceFrom() {
-        return priceFrom;
+    public EditText getPriceFromEditText() {
+        return priceFrom.getEditText();
     }
 
-    public TextInputLayout getPriceTo() {
-        return priceTo;
+    public EditText getPriceToEditText() {
+        return priceTo.getEditText();
     }
 
     public Button getApplyButton() {
         return apply;
+    }
+
+    public void setPriceFromErrorVisible(boolean showError) {
+        fromHasError = showError;
+        setPriceError(priceFrom, showError);
+    }
+
+    public void setPriceToErrorVisible(boolean showError) {
+        toHasError = showError;
+        setPriceError(priceTo, showError);
+    }
+
+    private void setPriceError(TextInputLayout view, boolean showError) {
+        view.setError(showError ? getPriceErrorString() : null);
+        apply.setEnabled(!(fromHasError || toHasError));
+    }
+
+    private String getPriceErrorString() {
+        return getContext().getString(R.string.price_error);
     }
 }

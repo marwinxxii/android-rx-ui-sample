@@ -1,6 +1,5 @@
 package com.marwinxxii.reactiveui.filters;
 
-import android.support.design.widget.TextInputLayout;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,7 +17,6 @@ import java.util.concurrent.TimeUnit;
 import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
 
 public class RxFiltersController implements IFiltersController {
     private Subscription mSubscription;
@@ -32,14 +30,22 @@ public class RxFiltersController implements IFiltersController {
             //pass main thread scheduler to avoid switching threads
             //main thread handler supports scheduling with delay
             Observable.combineLatest(
-                RxTextView.textChanges(filters.getPriceFrom().getEditText())
+                RxTextView.textChanges(filters.getPriceFromEditText())
                     .debounce(500L, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-                    .filter(filterProcessPrice(filters, filters.getPriceFrom()))
+                    .filter(price -> {
+                        boolean isValid = FiltersHelper.validatePrice(price);
+                        filters.setPriceFromErrorVisible(!isValid);
+                        return isValid;
+                    })
                     .map(FiltersHelper::convertPrice),
 
-                RxTextView.textChanges(filters.getPriceTo().getEditText())
+                RxTextView.textChanges(filters.getPriceToEditText())
                     .debounce(500L, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-                    .filter(filterProcessPrice(filters, filters.getPriceTo()))
+                    .filter(price -> {
+                        boolean isValid = FiltersHelper.validatePrice(price);
+                        filters.setPriceToErrorVisible(!isValid);
+                        return isValid;
+                    })
                     .map(FiltersHelper::convertPrice),
 
                 (from, to) -> FiltersHelper.processPriceRange(from, to, filters)
@@ -68,14 +74,5 @@ public class RxFiltersController implements IFiltersController {
     @Override
     public void onStop() {
         mSubscription.unsubscribe();
-    }
-
-    private static Func1<CharSequence, Boolean> filterProcessPrice(FiltersView filters, TextInputLayout priceView) {
-        return price -> {
-            boolean isError = !FiltersHelper.validatePrice(price);
-            FiltersHelper.toggleShowPriceError(isError, priceView);
-            filters.getApplyButton().setEnabled(!isError);
-            return !isError;
-        };
     }
 }

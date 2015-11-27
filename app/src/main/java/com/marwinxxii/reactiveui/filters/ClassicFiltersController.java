@@ -1,6 +1,5 @@
 package com.marwinxxii.reactiveui.filters;
 
-import android.support.design.widget.TextInputLayout;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
@@ -9,7 +8,7 @@ import android.widget.Toast;
 import com.marwinxxii.reactiveui.R;
 import com.marwinxxii.reactiveui.entities.PriceRange;
 import com.marwinxxii.reactiveui.entities.SearchRequest;
-import com.marwinxxii.reactiveui.network.DetachableCallback;
+import com.marwinxxii.reactiveui.network.DetachableCallbackWrapper;
 import com.marwinxxii.reactiveui.network.NetworkHelper;
 import com.marwinxxii.reactiveui.utils.DebouncingTextWatcher;
 
@@ -34,7 +33,7 @@ public class ClassicFiltersController implements IFiltersController {
             offersView.setVisibility(View.GONE);
         }
     };
-    private DetachableCallback<Integer> actualOffersCountCallback;
+    private DetachableCallbackWrapper<Integer> actualOffersCountCallback;
 
     @SuppressWarnings("ConstantConditions")
     @Override
@@ -55,25 +54,27 @@ public class ClassicFiltersController implements IFiltersController {
             }
         });
 
-        filters.getPriceFrom().getEditText().addTextChangedListener(new DebouncingTextWatcher(500L) {
+        filters.getPriceFromEditText().addTextChangedListener(new DebouncingTextWatcher(500L) {
             @Override
             public void onDebouncedTextChanged(CharSequence value) {
                 boolean isError = !FiltersHelper.validatePrice(value);
                 if (!isError) {
                     priceFrom = FiltersHelper.convertPrice(value);
                 }
-                handlePriceChange(isError, filters.getPriceFrom());
+                filters.setPriceFromErrorVisible(isError);
+                handlePriceChange(isError);
             }
         });
 
-        filters.getPriceTo().getEditText().addTextChangedListener(new DebouncingTextWatcher(500L) {
+        filters.getPriceToEditText().addTextChangedListener(new DebouncingTextWatcher(500L) {
             @Override
             public void onDebouncedTextChanged(CharSequence value) {
                 boolean isError = !FiltersHelper.validatePrice(value);
                 if (!isError) {
                     priceTo = FiltersHelper.convertPrice(value);
                 }
-                handlePriceChange(isError, filters.getPriceTo());
+                filters.setPriceToErrorVisible(isError);
+                handlePriceChange(isError);
             }
         });
 
@@ -95,13 +96,11 @@ public class ClassicFiltersController implements IFiltersController {
 
         offersView.setVisibility(View.GONE);
         tryReleaseNetworkCallback();//cancel previous + avoid leak
-        actualOffersCountCallback = new DetachableCallback<>(offersCountCallbackImpl);
+        actualOffersCountCallback = new DetachableCallbackWrapper<>(offersCountCallbackImpl);
         NetworkHelper.provideApi().offersCountForFilter(request, actualOffersCountCallback);
     }
 
-    private void handlePriceChange(boolean isError, TextInputLayout priceView) {
-        FiltersHelper.toggleShowPriceError(isError, priceView);
-        filters.getApplyButton().setEnabled(!isError);
+    private void handlePriceChange(boolean isError) {
         if (!isError) {
             PriceRange range = FiltersHelper.processPriceRange(priceFrom, priceTo, filters);
             if (range != null) {

@@ -47,15 +47,13 @@ public final class FiltersHelper {
     @Nullable
     public static PriceRange processPriceRange(Integer from, Integer to, FiltersView filters) {
         if (from == null || to == null || from <= to) {
-            toggleShowPriceError(false, filters.getPriceFrom());
-            toggleShowPriceError(false, filters.getPriceTo());
-            filters.getApplyButton().setEnabled(true);
+            filters.setPriceFromErrorVisible(false);
+            filters.setPriceToErrorVisible(false);
             return new PriceRange(from, to);
         } else {
             boolean fromGreater = from > to;
-            toggleShowPriceError(fromGreater, filters.getPriceFrom());
-            toggleShowPriceError(!fromGreater, filters.getPriceTo());
-            filters.getApplyButton().setEnabled(false);
+            filters.setPriceFromErrorVisible(fromGreater);
+            filters.setPriceToErrorVisible(!fromGreater);
             return null;
         }
     }

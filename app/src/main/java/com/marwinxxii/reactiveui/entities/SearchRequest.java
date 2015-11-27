@@ -3,12 +3,12 @@ package com.marwinxxii.reactiveui.entities;
 public class SearchRequest {
     private final DealType deal;
     private final PropertyType property;
-    private final PriceRange price;
+    private final PriceRange priceRange;
 
-    public SearchRequest(DealType deal, PropertyType property, PriceRange price) {
+    public SearchRequest(DealType deal, PropertyType property, PriceRange priceRange) {
         this.deal = deal;
         this.property = property;
-        this.price = price;
+        this.priceRange = priceRange;
     }
 
     public DealType getDeal() {
@@ -19,8 +19,8 @@ public class SearchRequest {
         return property;
     }
 
-    public PriceRange getPrice() {
-        return price;
+    public PriceRange getPriceRange() {
+        return priceRange;
     }
 
     @Override
@@ -28,7 +28,7 @@ public class SearchRequest {
         return /*"SearchRequest{" +*/
             "deal=" + deal +
             ", prop=" + property +
-            ", price=" + price +
+            ", priceRange=" + priceRange +
             '}';
     }
 }
